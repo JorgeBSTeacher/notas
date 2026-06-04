@@ -43,11 +43,12 @@ CC1,Competencia comunicación lingüística,1.0,CE1.1,Comprender y producir text
 
 ## Fuentes oficiales
 
-El currículo LOMLOE se publica en los reales decretos de enseñanzas mínimas y en los decretos autonómicos. Los códigos de los elementos curriculares varían por comunidad autónoma y materia.
+**Decreto 66/2022** de currículo de Cantabria para Educación Primaria (LOMLOE).
+Los códigos de los elementos curriculares siguen la estructura definida en este decreto autonómico.
 
 ### Estrategia de importación
-1. **Archivo predefinido**: incluir un archivo JSON con el currículo por defecto de las materias más comunes (Matemáticas, Lengua, Inglés, etc.) para ESO y Bachillerato.
-2. **Importación manual**: el profesor puede subir su propio archivo adaptado a su comunidad autónoma.
+1. **Archivo predefinido**: incluir un archivo JSON con el currículo real del Decreto 66/2022 para las materias de Primaria.
+2. **Importación manual**: el profesor puede subir su propio archivo adaptado.
 3. **Edición posterior**: tras la importación, el profesor puede modificar descripciones y pesos.
 
 ## Validaciones
@@ -58,8 +59,8 @@ El currículo LOMLOE se publica en los reales decretos de enseñanzas mínimas y
   - **Actualizar**: añade nuevos elementos y actualiza descripciones, pero no elimina.
   - **Cancelar**.
 
-## Esquema de códigos recomendado
+## Esquema de códigos (Decreto 66/2022 Cantabria)
 
-- `CC{1-8}` para Competencias Clave (son fijas en LOMLOE: 8 competencias).
+- `CC{1-8}` para Competencias Clave (fijas LOMLOE: 8 competencias).
 - `CE{materia}.{n}` para Competencias Específicas.
 - `CRIT{materia}.{ce}.{n}` para Criterios de Evaluación.
