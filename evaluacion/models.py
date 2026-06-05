@@ -37,6 +37,22 @@ class Trimestre(models.Model):
         return f"{self.get_nombre_display()} - {self.asignatura}"
 
 
+class UnidadDidactica(models.Model):
+    nombre = models.CharField(max_length=200)
+    trimestre = models.ForeignKey(
+        Trimestre, on_delete=models.CASCADE, related_name="unidades"
+    )
+    orden = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        verbose_name = "unidad didáctica / situación de aprendizaje"
+        verbose_name_plural = "unidades didácticas / situaciones de aprendizaje"
+        ordering = ["trimestre", "orden"]
+
+    def __str__(self):
+        return f"{self.nombre}"
+
+
 class ActividadEvaluable(models.Model):
     TIPOS = [
         ("examen", "Examen"),
@@ -58,6 +74,13 @@ class ActividadEvaluable(models.Model):
     )
     criterios = models.ManyToManyField(
         CriterioEvaluacion, blank=True, related_name="actividades_globales"
+    )
+    unidad_didactica = models.ForeignKey(
+        "UnidadDidactica",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="actividades",
     )
 
     class Meta:

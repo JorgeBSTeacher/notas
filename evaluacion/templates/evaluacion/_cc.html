@@ -1,0 +1,33 @@
+<table>
+  <thead>
+    <tr>
+      <th>Alumno</th>
+      {% for cc in competencias_clave %}
+        <th style="font-size: 0.75rem;">
+          {{ cc.codigo }}<br>
+          <small class="text-muted">peso: {{ cc.peso }}</small>
+        </th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for alumno in alumnos %}
+      <tr>
+        <td>{{ alumno.apellidos }}, {{ alumno.nombre }}</td>
+        {% for cc in competencias_clave %}
+          {% with key=alumno.id|stringformat:"s"|add:"_"|add:cc.id %}
+            {% with nota=notas_cc|get_item:key %}
+              <td>
+                {% if nota is not None %}
+                  <strong>{{ nota|floatformat:2 }}</strong>
+                {% else %}
+                  <span class="text-muted">—</span>
+                {% endif %}
+              </td>
+            {% endwith %}
+          {% endwith %}
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

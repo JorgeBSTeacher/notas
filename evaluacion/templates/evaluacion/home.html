@@ -1,0 +1,31 @@
+{% extends "evaluacion/base.html" %}
+{% block content %}
+<h2 style="margin-bottom: 16px;">Mis grupos</h2>
+
+{% if not grupos %}
+  <div class="card text-center" style="padding: 40px;">
+    <p class="text-muted" style="font-size: 1.1rem;">No hay grupos todavía.</p>
+    <p class="text-muted">Crea grupos y asignaturas desde el <a href="{% url 'admin:index' %}">panel de administración</a>.</p>
+  </div>
+{% endif %}
+
+{% for grupo in grupos %}
+  <div class="card" style="padding: 0; overflow: hidden;">
+    <div class="grupo-header">
+      {{ grupo.nombre }} · {{ grupo.curso_academico }}
+      <span class="badge" style="float: right;">{{ grupo.alumnos.count }} alumnos</span>
+    </div>
+    <div style="padding: 12px;">
+      {% for asignatura in grupo.asignaturas.all %}
+        <a href="{% url 'workspace' asignatura.id %}" 
+           class="btn btn-outline btn-sm"
+           style="margin: 4px;">
+          {{ asignatura.nombre }}
+        </a>
+      {% empty %}
+        <span class="text-muted">Sin asignaturas</span>
+      {% endfor %}
+    </div>
+  </div>
+{% endfor %}
+{% endblock %}

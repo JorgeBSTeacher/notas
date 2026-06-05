@@ -47,10 +47,12 @@ notas/
 │   │   ├── models.py
 │   │   ├── admin.py
 │   │   └── ...
-│   ├── evaluacion/            # App: Actividades, Calificaciones
+│   ├── evaluacion/            # App: Actividades, Calificaciones, Panel
 │   │   ├── models.py
 │   │   ├── admin.py
-│   │   └── ...
+│   │   ├── views.py           # Workspace: home + panel con tabs
+│   │   ├── urls.py            # URLs públicas (/, /panel/<id>/)
+│   │   └── templates/
 │   └── usuarios/              # App: extensión de User (si necesaria)
 │       └── ...
 ├── media/                     # Archivos subidos (importaciones, etc.)
@@ -59,9 +61,18 @@ notas/
     └── admin/
 ```
 
+## URLs
+
+| Ruta | Vista | Descripción |
+|------|-------|-------------|
+| `/` | `home` | Lista de grupos con asignaturas |
+| `/panel/<id>/` | `workspace` | Panel de trabajo de una asignatura |
+| `/admin/` | Admin Django | Gestión de todos los datos |
+
 ## Principios arquitectónicos
 
 - **Lógica de negocio en modelos/services**, no en vistas.
-- **Cálculos de acumulación** en métodos del modelo o servicios reutilizables.
-- **Admin personalizado** con vistas propias donde la UX lo requiera (tabla de notas).
+- **Cálculos de acumulación** en las funciones helper de `views.py` (promedio simple, media ponderada).
+- **Admin personalizado** con vistas propias donde la UX lo requiera (entrada de notas).
+- **Workspace público** como interfaz principal; admin para gestión de datos.
 - **Migraciones** para todos los cambios de esquema.

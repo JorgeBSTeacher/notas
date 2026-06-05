@@ -41,12 +41,18 @@ CursoAcademico
             ├── nombre: str (1º, 2º, 3º, Global)
             ├── asignatura: FK → Asignatura
             │
-            └── ActividadEvaluable
+            ├── UnidadDidactica (Tema / Situación de Aprendizaje)
+            │   ├── nombre: str (ej: "UD1: Números naturales")
+            │   ├── trimestre: FK → Trimestre
+            │   └── orden: int
+            │
+            └── ActividadEvaluable (opcionalmente agrupada en UnidadDidactica)
                 ├── nombre: str (ej: "Examen Tema 3")
                 ├── tipo: str (examen, libreta, exposicion, tarea, otro)
                 ├── modo: enum (global, por_pregunta)
                 ├── fecha: date
                 ├── trimestre: FK → Trimestre
+                ├── unidad_didactica: FK → UnidadDidactica (nullable)
                 │
                 ├── [Modo global] CriteriosAsignados (M2M con CriterioEvaluacion)
                 └── [Modo por pregunta] Pregunta
@@ -76,7 +82,9 @@ Asignatura 1──n CompetenciaClave
 CompetenciaClave 1──n CompetenciaEspecifica
 CompetenciaEspecifica 1──n CriterioEvaluacion
 Asignatura 1──n Trimestre
+Trimestre 1──n UnidadDidactica
 Trimestre 1──n ActividadEvaluable
+UnidadDidactica 1──n ActividadEvaluable (nullable)
 ActividadEvaluable n──m CriterioEvaluacion (modo global)
 ActividadEvaluable 1──n Pregunta
 Pregunta n──1 CriterioEvaluacion

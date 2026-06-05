@@ -121,5 +121,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+LOGIN_URL = '/admin/login/'
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 SILENCED_SYSTEM_CHECKS = ['security.W019']

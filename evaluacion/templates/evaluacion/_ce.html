@@ -1,0 +1,34 @@
+<table>
+  <thead>
+    <tr>
+      <th>Alumno</th>
+      {% for ce in competencias_especificas %}
+        <th style="font-size: 0.75rem;">
+          {{ ce.codigo }}<br>
+          <small class="text-muted">CC: {{ ce.competencia_clave.codigo }}</small>
+          <br><small class="text-muted">peso: {{ ce.peso }}</small>
+        </th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for alumno in alumnos %}
+      <tr>
+        <td>{{ alumno.apellidos }}, {{ alumno.nombre }}</td>
+        {% for ce in competencias_especificas %}
+          {% with key=alumno.id|stringformat:"s"|add:"_"|add:ce.id %}
+            {% with nota=notas_ce|get_item:key %}
+              <td>
+                {% if nota is not None %}
+                  <strong>{{ nota|floatformat:2 }}</strong>
+                {% else %}
+                  <span class="text-muted">—</span>
+                {% endif %}
+              </td>
+            {% endwith %}
+          {% endwith %}
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

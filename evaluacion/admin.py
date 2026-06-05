@@ -5,6 +5,7 @@ from django import forms
 from django.db import transaction
 from .models import (
     Trimestre,
+    UnidadDidactica,
     ActividadEvaluable,
     Pregunta,
     Calificacion,
@@ -28,6 +29,12 @@ class RubricaConfigAdmin(admin.ModelAdmin):
 class PreguntaInline(admin.TabularInline):
     model = Pregunta
     extra = 1
+
+
+@admin.register(UnidadDidactica)
+class UnidadDidacticaAdmin(admin.ModelAdmin):
+    list_display = ("nombre", "trimestre", "orden")
+    list_filter = ("trimestre__asignatura",)
 
 
 @admin.register(Trimestre)

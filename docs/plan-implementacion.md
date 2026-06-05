@@ -2,52 +2,56 @@
 
 ## Milestones
 
-### M1: Modelo de datos + Admin básico
+### M1: Modelo de datos + Admin básico ✅
 **Objetivo**: Tener la base de datos funcional con admin para gestionar datos manualmente.
 
 Tareas:
-- [ ] Inicializar proyecto Django (`django-admin startproject`)
-- [ ] Crear apps: `grupos`, `curriculo`, `evaluacion`
-- [ ] Definir modelos: CursoAcademico, Grupo, Alumno, Asignatura, Trimestre
-- [ ] Definir modelos: CompetenciaClave, CompetenciaEspecifica, CriterioEvaluacion
-- [ ] Definir modelos: ActividadEvaluable, Pregunta, Calificacion
-- [ ] Configurar admin para todos los modelos
-- [ ] Instalar y configurar django-admin-interface
-- [ ] Migraciones y migrar
-- [ ] Verificar administración manual
+- [x] Inicializar proyecto Django (`django-admin startproject`)
+- [x] Crear apps: `grupos`, `curriculo`, `evaluacion`
+- [x] Definir modelos: CursoAcademico, Grupo, Alumno, Asignatura, Trimestre
+- [x] Definir modelos: CompetenciaClave, CompetenciaEspecifica, CriterioEvaluacion
+- [x] Definir modelos: ActividadEvaluable, Pregunta, Calificacion
+- [x] Configurar admin para todos los modelos
+- [x] Instalar y configurar django-admin-interface
+- [x] Migraciones y migrar
+- [x] Verificar administración manual
 
-### M2: Elementos curriculares LOMLOE
+### M2: Elementos curriculares LOMLOE ✅
 **Objetivo**: Poder importar y gestionar el currículo LOMLOE.
 
 Tareas:
-- [ ] Crear comando de gestión para importar currículo desde JSON/CSV
-- [ ] Crear vista en admin para subir archivo de importación
-- [ ] Incluir archivo JSON con currículo por defecto (materias comunes)
-- [ ] CRUD completo de elementos curriculares con edición de pesos
-- [ ] Validaciones de códigos duplicados y consistencia jerárquica
+- [x] Crear comando de gestión para importar currículo desde JSON/CSV
+- [x] Crear vista en admin para subir archivo de importación
+- [x] Incluir archivo JSON con currículo por defecto (materias comunes)
+- [x] CRUD completo de elementos curriculares con edición de pesos
+- [x] Validaciones de códigos duplicados y consistencia jerárquica
 
-### M3: Actividades y calificaciones
+### M3: Actividades y calificaciones ✅
 **Objetivo**: Poder crear actividades y registrar calificaciones.
 
 Tareas:
-- [ ] CRUD de actividades evaluables (modo global y por pregunta)
-- [ ] CRUD de preguntas (modo por pregunta)
-- [ ] Registro de calificaciones numéricas (0-10)
-- [ ] Registro de calificaciones con rúbrica (4-5 niveles)
-- [ ] Conversión automática rúbrica ↔ numérica
-- [ ] Validaciones: nota no nula cuando hay actividad, rango 0-10
+- [x] CRUD de actividades evaluables (modo global y por pregunta)
+- [x] CRUD de preguntas (modo por pregunta)
+- [x] Registro de calificaciones numéricas (0-10 con 2 decimales)
+- [x] Registro de calificaciones con rúbrica (4-5 niveles)
+- [x] Conversión automática rúbrica ↔ numérica (regla de tres o personalizada)
+- [x] Validaciones: nota no nula cuando hay actividad, rango 0-10
+- [x] Modelo RubricaConfig + RubricaNivel para niveles personalizados
+- [x] Vista de entrada masiva de notas (tabla Alumnos × Criterios)
 
-### M4: Vistas de evaluación por trimestre y global
-**Objetivo**: Visualizar notas acumuladas con cálculos automáticos.
+### M4: Workspace con vistas de evaluación ✅
+**Objetivo**: Panel de trabajo con tabla Alumnos × Actividades y vistas por criterios/CE/CC.
 
 Tareas:
-- [ ] Implementar cálculo de nota acumulada por criterio (promedio simple)
-- [ ] Implementar cálculo de nota de CE (media ponderada)
-- [ ] Implementar cálculo de nota de CC (media ponderada)
-- [ ] Vista de tabla Alumnos × Criterios por trimestre
-- [ ] Vista global (acumula los tres trimestres)
-- [ ] Selector de trimestre funcional
-- [ ] Vistas personalizadas en admin para la tabla de notas
+- [x] Modelo UnidadDidactica para agrupar actividades por tema/SA
+- [x] FK de ActividadEvaluable → UnidadDidactica
+- [x] Página principal (Home) con lista de grupos y asignaturas
+- [x] Workspace con selector de trimestre y pestañas
+- [x] Pestaña Panel: tabla Alumnos × Actividades agrupadas por unidad
+- [x] Pestaña Criterios: tabla Alumnos × Criterios (promedio)
+- [x] Pestaña CE: tabla Alumnos × Competencias Específicas (media ponderada)
+- [x] Pestaña CC: tabla Alumnos × Competencias Clave (media ponderada)
+- [x] Cálculo de nota global de unidad (promedio simple de actividades)
 
 ### M5: Autenticación multi-profesor
 **Objetivo**: Soporte para múltiples profesores con aislamiento de datos.

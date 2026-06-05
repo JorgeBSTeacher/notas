@@ -86,7 +86,28 @@
 2. Selecciona "Global".
 3. Visualiza la misma vista que por trimestre pero con datos acumulados del curso completo.
 
-## CU10: Cambiar entre trimestres
+## CU10: Agrupar actividades en unidades didácticas
+
+**Actor**: Profesor
+**Flujo**:
+1. Desde el panel de la asignatura, selecciona "+ Unidad".
+2. Introduce nombre de la unidad (ej: "UD1: Números naturales") y orden.
+3. Al crear actividades, asigna cada una a su unidad correspondiente.
+4. En el panel, las actividades aparecen agrupadas visualmente por unidad.
+5. La nota global de la unidad es el promedio simple de todas las actividades que contiene.
+
+## CU11: Navegar entre vistas del panel
+
+**Actor**: Profesor
+**Flujo**:
+1. Desde el panel de la asignatura, ve las pestañas: Panel, Criterios, CE, CC.
+2. **Panel**: tabla Alumnos × Actividades agrupadas por unidad didáctica.
+3. **Criterios**: tabla Alumnos × Criterios de evaluación con notas acumuladas.
+4. **CE**: tabla Alumnos × Competencias Específicas (media ponderada).
+5. **CC**: tabla Alumnos × Competencias Clave (media ponderada desde CE).
+6. Puede cambiar de trimestre con el selector para ver datos de cada periodo.
+
+## CU12: Cambiar entre trimestres
 
 **Actor**: Profesor
 **Flujo**:

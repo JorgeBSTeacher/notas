@@ -1,0 +1,34 @@
+<table>
+  <thead>
+    <tr>
+      <th>Alumno</th>
+      {% for criterio in criterios %}
+        <th style="font-size: 0.75rem;">
+          {{ criterio.codigo }}<br>
+          <small class="text-muted">CE: {{ criterio.competencia_especifica.codigo }}</small>
+          <br><small class="text-muted">peso: {{ criterio.peso }}</small>
+        </th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for alumno in alumnos %}
+      <tr>
+        <td>{{ alumno.apellidos }}, {{ alumno.nombre }}</td>
+        {% for criterio in criterios %}
+          {% with key=alumno.id|stringformat:"s"|add:"_"|add:criterio.id %}
+            {% with nota=notas_criterios|get_item:key %}
+              <td>
+                {% if nota is not None %}
+                  {{ nota|floatformat:2 }}
+                {% else %}
+                  <span class="text-muted">—</span>
+                {% endif %}
+              </td>
+            {% endwith %}
+          {% endwith %}
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
