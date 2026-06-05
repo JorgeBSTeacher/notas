@@ -1,0 +1,164 @@
+[
+    {
+        "codigo": "CC1",
+        "descripcion": "Competencia en comunicación lingüística",
+        "peso": 1.0,
+        "competencias_especificas": [
+            {
+                "codigo": "CE.CCL.1",
+                "descripcion": "Comprender y producir textos orales y escritos",
+                "peso": 1.0,
+                "criterios": [
+                    {
+                        "codigo": "CRIT.CCL.1.1",
+                        "descripcion": "Participar en intercambios comunicativos respetando las normas",
+                        "peso": 1.0
+                    },
+                    {
+                        "codigo": "CRIT.CCL.1.2",
+                        "descripcion": "Producir textos orales coherentes y adecuados",
+                        "peso": 1.0
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "codigo": "CC2",
+        "descripcion": "Competencia plurilingüe",
+        "peso": 1.0,
+        "competencias_especificas": [
+            {
+                "codigo": "CE.CP.1",
+                "descripcion": "Comunicarse en diferentes lenguas",
+                "peso": 1.0,
+                "criterios": [
+                    {
+                        "codigo": "CRIT.CP.1.1",
+                        "descripcion": "Comprender mensajes en lengua extranjera",
+                        "peso": 1.0
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "codigo": "CC3",
+        "descripcion": "Competencia matemática y en ciencia, tecnología e ingeniería",
+        "peso": 1.0,
+        "competencias_especificas": [
+            {
+                "codigo": "CE.CM.1",
+                "descripcion": "Resolver problemas matemáticos",
+                "peso": 1.0,
+                "criterios": [
+                    {
+                        "codigo": "CRIT.CM.1.1",
+                        "descripcion": "Aplicar estrategias de resolución de problemas",
+                        "peso": 1.0
+                    },
+                    {
+                        "codigo": "CRIT.CM.1.2",
+                        "descripcion": "Utilizar el razonamiento matemático",
+                        "peso": 1.0
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "codigo": "CC4",
+        "descripcion": "Competencia digital",
+        "peso": 1.0,
+        "competencias_especificas": [
+            {
+                "codigo": "CE.CD.1",
+                "descripcion": "Utilizar herramientas digitales de forma responsable",
+                "peso": 1.0,
+                "criterios": [
+                    {
+                        "codigo": "CRIT.CD.1.1",
+                        "descripcion": "Buscar y seleccionar información digital",
+                        "peso": 1.0
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "codigo": "CC5",
+        "descripcion": "Competencia personal, social y de aprender a aprender",
+        "peso": 1.0,
+        "competencias_especificas": [
+            {
+                "codigo": "CE.PS.1",
+                "descripcion": "Desarrollar hábitos de trabajo y aprendizaje autónomo",
+                "peso": 1.0,
+                "criterios": [
+                    {
+                        "codigo": "CRIT.PS.1.1",
+                        "descripcion": "Planificar y organizar el trabajo personal",
+                        "peso": 1.0
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "codigo": "CC6",
+        "descripcion": "Competencia ciudadana",
+        "peso": 1.0,
+        "competencias_especificas": [
+            {
+                "codigo": "CE.CC.1",
+                "descripcion": "Actuar con responsabilidad y respeto en la sociedad",
+                "peso": 1.0,
+                "criterios": [
+                    {
+                        "codigo": "CRIT.CC.1.1",
+                        "descripcion": "Conocer y respetar las normas de convivencia",
+                        "peso": 1.0
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "codigo": "CC7",
+        "descripcion": "Competencia emprendedora",
+        "peso": 1.0,
+        "competencias_especificas": [
+            {
+                "codigo": "CE.E.1",
+                "descripcion": "Desarrollar iniciativa y creatividad",
+                "peso": 1.0,
+                "criterios": [
+                    {
+                        "codigo": "CRIT.E.1.1",
+                        "descripcion": "Proponer ideas y soluciones creativas",
+                        "peso": 1.0
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "codigo": "CC8",
+        "descripcion": "Competencia en conciencia y expresión culturales",
+        "peso": 1.0,
+        "competencias_especificas": [
+            {
+                "codigo": "CE.CEC.1",
+                "descripcion": "Apreciar y expresar manifestaciones culturales y artísticas",
+                "peso": 1.0,
+                "criterios": [
+                    {
+                        "codigo": "CRIT.CEC.1.1",
+                        "descripcion": "Reconocer manifestaciones culturales del entorno",
+                        "peso": 1.0
+                    }
+                ]
+            }
+        ]
+    }
+]

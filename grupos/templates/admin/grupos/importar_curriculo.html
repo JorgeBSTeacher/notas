@@ -1,0 +1,19 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<h1>Importar currículo LOMLOE</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="default">Importar</button>
+</form>
+
+<p style="margin-top: 1em;">
+    El archivo JSON debe seguir la estructura:
+    <code>CC → competencias_especificas → criterios</code>.
+    Consulta la documentación para el formato exacto.
+</p>
+
+<a href="{% url 'admin:grupos_asignatura_changelist' %}">Volver a asignaturas</a>
+{% endblock %}

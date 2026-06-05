@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from grupos.models import Asignatura, Alumno
 from curriculo.models import CriterioEvaluacion
@@ -103,6 +104,22 @@ class Calificacion(models.Model):
         verbose_name = "calificación"
         verbose_name_plural = "calificaciones"
         unique_together = ("alumno", "actividad", "criterio", "trimestre")
+
+    def clean(self):
+        if self.tipo_evaluacion == "numerica" and self.valor_numerico is None:
+            raise ValidationError("El valor numérico es obligatorio para evaluación numérica.")
+        if self.tipo_evaluacion == "rubrica" and self.nivel_rubrica is None:
+            raise ValidationError("El nivel de rúbrica es obligatorio para evaluación con rúbrica.")
+        if self.valor_numerico is not None and not (0 <= self.valor_numerico <= 10):
+            raise ValidationError("El valor numérico debe estar entre 0 y 10.")
+        if self.nivel_rubrica is not None and not (1 <= self.nivel_rubrica <= 5):
+            raise ValidationError("El nivel de rúbrica debe estar entre 1 y 5.")
+        if not (0 <= self.nota_final <= 10):
+            raise ValidationError("La nota final debe estar entre 0 y 10.")
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.alumno} - {self.criterio}: {self.nota_final}"
