@@ -30,3 +30,4 @@
 | Documento | Descripción |
 |-----------|-------------|
 | [plan-implementacion.md](plan-implementacion.md) | Milestones y tareas detalladas |
+| [08-mejoras-pendientes.md](08-mejoras-pendientes.md) | Funcionalidades propuestas para próximas iteraciones |
