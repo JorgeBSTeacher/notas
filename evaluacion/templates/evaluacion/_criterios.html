@@ -1,23 +1,25 @@
 {% load evaluacion_extras %}
+<div class="card" style="overflow-x: auto;">
 <table>
   <thead>
     <tr>
       <th>Alumno</th>
       {% for criterio in criterios %}
-        <th style="font-size: 0.75rem;">
+        <th style="font-size: 0.75rem; min-width: 70px;">
           {{ criterio.codigo }}<br>
-          <small class="text-muted">CE: {{ criterio.competencia_especifica.codigo }}</small>
-          <br><small class="text-muted">peso: {{ criterio.peso }}</small>
+          <span class="text-muted" style="font-size: 0.65rem;">CE: {{ criterio.competencia_especifica.codigo }}</span>
         </th>
       {% endfor %}
+      <th style="background: #eef2ff; color: #4338ca; min-width: 60px;">Media</th>
     </tr>
   </thead>
   <tbody>
     {% for alumno in alumnos %}
       <tr>
-        <td>{{ alumno.apellidos }}, {{ alumno.nombre }}</td>
+        <td style="font-weight: 500;">{{ alumno.apellidos }}, {{ alumno.nombre }}</td>
         {% for criterio in criterios %}
-          {% with key=alumno.id|stringformat:"s"|add:"_"|add:criterio.id %}
+          {% with cid=criterio.id|stringformat:"s" %}
+          {% with key=alumno.id|stringformat:"s"|add:"_"|add:cid %}
             {% with nota=notas_criterios|get_item:key %}
               <td>
                 {% if nota is not None %}
@@ -28,8 +30,30 @@
               </td>
             {% endwith %}
           {% endwith %}
+          {% endwith %}
         {% endfor %}
+        <td style="background: #eef2ff; font-weight: 700; color: #4338ca;">
+          {% with media=medias_alumnos_criterios|get_item:alumno.id %}
+            {{ media|floatformat:2|default:"—" }}
+          {% endwith %}
+        </td>
       </tr>
     {% endfor %}
   </tbody>
+  <tfoot>
+    <tr>
+      <td style="background: #f1f5f9; font-weight: 700; color: #475569;">Media clase</td>
+      {% for criterio in criterios %}
+        {% with cid=criterio.id|stringformat:"s" %}
+        {% with media=medias_criterio|get_item:cid %}
+          <td style="background: #f1f5f9; font-weight: 700; color: #475569;">
+            {{ media|floatformat:2|default:"—" }}
+          </td>
+        {% endwith %}
+        {% endwith %}
+      {% endfor %}
+      <td style="background: #e0e7ff; font-weight: 700; color: #4338ca;">—</td>
+    </tr>
+  </tfoot>
 </table>
+</div>

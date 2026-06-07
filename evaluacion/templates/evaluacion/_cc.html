@@ -1,22 +1,25 @@
 {% load evaluacion_extras %}
+<div class="card" style="overflow-x: auto;">
 <table>
   <thead>
     <tr>
       <th>Alumno</th>
       {% for cc in competencias_clave %}
-        <th style="font-size: 0.75rem;">
+        <th style="font-size: 0.75rem; min-width: 70px;">
           {{ cc.codigo }}<br>
-          <small class="text-muted">peso: {{ cc.peso }}</small>
+          <span class="text-muted" style="font-size: 0.65rem;">peso: {{ cc.peso }}</span>
         </th>
       {% endfor %}
+      <th style="background: #eef2ff; color: #4338ca; min-width: 60px;">Media</th>
     </tr>
   </thead>
   <tbody>
     {% for alumno in alumnos %}
       <tr>
-        <td>{{ alumno.apellidos }}, {{ alumno.nombre }}</td>
+        <td style="font-weight: 500;">{{ alumno.apellidos }}, {{ alumno.nombre }}</td>
         {% for cc in competencias_clave %}
-          {% with key=alumno.id|stringformat:"s"|add:"_"|add:cc.id %}
+          {% with ccid=cc.id|stringformat:"s" %}
+          {% with key=alumno.id|stringformat:"s"|add:"_"|add:ccid %}
             {% with nota=notas_cc|get_item:key %}
               <td>
                 {% if nota is not None %}
@@ -27,8 +30,30 @@
               </td>
             {% endwith %}
           {% endwith %}
+          {% endwith %}
         {% endfor %}
+        <td style="background: #eef2ff; font-weight: 700; color: #4338ca;">
+          {% with media=medias_alumnos_cc|get_item:alumno.id %}
+            {{ media|floatformat:2|default:"—" }}
+          {% endwith %}
+        </td>
       </tr>
     {% endfor %}
   </tbody>
+  <tfoot>
+    <tr>
+      <td style="background: #f1f5f9; font-weight: 700; color: #475569;">Media clase</td>
+      {% for cc in competencias_clave %}
+        {% with ccid=cc.id|stringformat:"s" %}
+        {% with media=medias_cc|get_item:ccid %}
+          <td style="background: #f1f5f9; font-weight: 700; color: #475569;">
+            {{ media|floatformat:2|default:"—" }}
+          </td>
+        {% endwith %}
+        {% endwith %}
+      {% endfor %}
+      <td style="background: #e0e7ff; font-weight: 700; color: #4338ca;">—</td>
+    </tr>
+  </tfoot>
 </table>
+</div>

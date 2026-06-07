@@ -1,0 +1,169 @@
+{% extends "evaluacion/base.html" %}
+{% load evaluacion_extras %}
+{% block content %}
+<div class="flex items-center justify-between mb-4">
+  <div class="flex items-center gap-3">
+    <a href="{% url 'workspace' asignatura.id %}?trimestre={{ actividad.trimestre_id }}&tab=panel" class="btn btn-outline btn-sm">← Volver</a>
+    <h2 style="font-size: 1.3rem;">{{ actividad.nombre }}</h2>
+    <span class="badge badge-blue">{{ grupo.nombre }}</span>
+    <span class="type-badge type-{{ actividad.tipo|default:'otro' }}">{{ actividad.get_tipo_display|default:actividad.tipo }}</span>
+    <span class="badge badge-amber">{{ actividad.get_modo_display }}</span>
+  </div>
+  <span class="text-muted">{{ actividad.fecha|date:"d/m/Y" }}</span>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <span style="font-weight: 600; font-size: 0.9rem;">{{ alumnos.count }} alumnos</span>
+    {% if criterios %}
+      <span class="badge badge-blue">{{ criterios.count }} criterios</span>
+    {% endif %}
+  </div>
+
+  {% if actividad.modo == "por_pregunta" and preguntas %}
+    <table>
+      <thead>
+        <tr>
+          <th style="min-width: 180px;">Alumno</th>
+          {% for pregunta in preguntas %}
+            <th style="font-size: 0.75rem; min-width: 80px;">
+              {{ pregunta.enunciado|truncatechars:25 }}
+              <br><span class="text-muted" style="font-size: 0.65rem;">{{ pregunta.criterio.codigo|default:pregunta.criterio.id }}</span>
+            </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for alumno in alumnos %}
+          <tr>
+            <td style="font-weight: 600;">{{ alumno.apellidos }}, {{ alumno.nombre }}</td>
+            {% for pregunta in preguntas %}
+              {% with pk=pregunta.criterio.id|stringformat:"s" %}
+              {% with key=alumno.id|stringformat:"s"|add:"_"|add:pk %}
+                {% with calif=calificaciones|get_item:key %}
+                  <td>
+                    <input type="number"
+                           step="0.5"
+                           min="0"
+                           max="{{ pregunta.puntuacion_maxima }}"
+                           class="nota-input"
+                           data-alumno="{{ alumno.id }}"
+                           data-criterio="{{ pregunta.criterio.id }}"
+                           data-actividad="{{ actividad.id }}"
+                           data-punt-max="{{ pregunta.puntuacion_maxima }}"
+                           value="{{ calif.valor_numerico|default:'' }}"
+                           style="width: 70px; text-align: center;">
+                    <span class="saved-indicator" id="ind-{{ alumno.id }}-{{ pregunta.criterio.id }}"></span>
+                  </td>
+                {% endwith %}
+              {% endwith %}
+              {% endwith %}
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% elif actividad.modo == "global" and criterios %}
+    <table>
+      <thead>
+        <tr>
+          <th style="min-width: 180px;">Alumno</th>
+          <th style="min-width: 120px;">Nota (0-10)</th>
+          <th style="font-size: 0.75rem; color: #64748b;">Se aplica a: {% for c in criterios %}{{ c.codigo|default:c.id }}{% if not forloop.last %}, {% endif %}{% endfor %}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for alumno in alumnos %}
+          {% with c0id=criterios.0.id|stringformat:"s" %}
+          {% with key=alumno.id|stringformat:"s"|add:"_"|add:c0id %}
+            {% with calif=calificaciones|get_item:key %}
+              <tr>
+                <td style="font-weight: 600;">{{ alumno.apellidos }}, {{ alumno.nombre }}</td>
+                <td>
+                  <input type="number"
+                         step="0.5"
+                         min="0"
+                         max="10"
+                         class="nota-input nota-global"
+                         data-alumno="{{ alumno.id }}"
+                         data-actividad="{{ actividad.id }}"
+                         value="{{ calif.valor_numerico|default:'' }}"
+                         style="width: 80px; text-align: center;">
+                  <span class="saved-indicator" id="ind-{{ alumno.id }}"></span>
+                </td>
+                <td style="font-size: 0.75rem; color: #94a3b8; text-align: left;">
+                  {{ calif.nota_final|floatformat:2|default:"—" }}
+                </td>
+              </tr>
+            {% endwith %}
+          {% endwith %}
+          {% endwith %}
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="card text-center" style="padding: 40px;">
+      <p class="text-muted">Esta actividad no tiene criterios asignados.</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const csrftoken =
+  document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+  || document.cookie.split('; ').find(c => c.startsWith('csrftoken='))?.split('=')[1];
+const modo = "{{ actividad.modo }}";
+
+document.querySelectorAll('.nota-input').forEach(input => {
+  let timeout = null;
+  input.addEventListener('input', () => {
+    clearTimeout(timeout);
+    const critId = input.dataset.criterio || 'global';
+    const ind = document.getElementById(`ind-${input.dataset.alumno}${critId !== 'global' ? '-' + critId : ''}`);
+    if (ind) ind.className = 'saved-indicator saving';
+    timeout = setTimeout(() => autoSave(input, ind), 400);
+  });
+});
+
+function autoSave(input, ind) {
+  const valor = input.value.trim();
+  const numVal = valor === '' ? null : input.valueAsNumber;
+  data = {
+    alumno_id: parseInt(input.dataset.alumno),
+    actividad_id: parseInt(input.dataset.actividad),
+    valor: (numVal !== null && !isNaN(numVal)) ? numVal : null,
+    tipo: 'numerica',
+    modo: modo,
+  };
+  if (input.dataset.criterio) {
+    data.criterio_id = parseInt(input.dataset.criterio);
+  }
+
+  fetch('{% url "guardar_nota" %}', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': csrftoken,
+    },
+    body: JSON.stringify(data),
+  })
+  .then(r => r.json())
+  .then(resp => {
+    const allDeleted = resp.results && resp.results.every(r => r.deleted);
+    if (allDeleted) {
+      if (ind) ind.className = 'saved-indicator';
+      input.value = '';
+    } else if (resp.saved) {
+      if (ind) ind.className = 'saved-indicator saved';
+    } else {
+      if (ind) ind.className = 'saved-indicator error';
+    }
+  })
+  .catch(() => {
+    if (ind) ind.className = 'saved-indicator error';
+  });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,85 @@
+{% load evaluacion_extras %}
+<div style="overflow-x: auto;">
+<table>
+  <thead>
+    {# Row 1: group headers by Unidad Didáctica #}
+    <tr>
+      <th style="position: sticky; left: 0; z-index: 3; background: #f8fafc; min-width: 180px; border-bottom: none;">Alumno</th>
+      {% for unidad, acts in agrupaciones_ud %}
+        <th colspan="{{ acts|length|add:1 }}" style="background: #eef2ff; color: #4338ca; font-size: 0.75rem; text-align: center; border-bottom: none; padding: 6px 4px;">
+          {% if unidad %}
+            📂 {{ unidad.nombre }}
+          {% else %}
+            📂 Sin unidad
+          {% endif %}
+        </th>
+      {% endfor %}
+      <th rowspan="2" style="background: #eef2ff; color: #4338ca; font-size: 0.75rem; min-width: 60px; vertical-align: middle;">Media</th>
+    </tr>
+    {# Row 2: individual actividad headers #}
+    <tr>
+      <th style="position: sticky; left: 0; z-index: 3; background: #f8fafc; min-width: 180px;"></th>
+      {% for unidad, acts in agrupaciones_ud %}
+        {% for a in acts %}
+          <th style="font-size: 0.65rem; padding: 4px 2px; min-width: 64px; text-align: center; line-height: 1.2; vertical-align: bottom;">
+            <span class="type-badge type-{{ a.tipo|default:'otro' }}" style="font-size: 0.55rem; display: inline-block; margin-bottom: 2px;">{{ a.get_tipo_display|default:a.tipo|slice:":4" }}</span>
+            <br>
+            <span title="{{ a.nombre }}" style="cursor: help;">{{ a.nombre|truncatechars:16 }}</span>
+            <br>
+            <span style="font-size: 0.55rem; color: #94a3b8;">{{ a.fecha|date:"d/m" }}</span>
+          </th>
+        {% endfor %}
+        <th style="background: #f0f4ff; font-size: 0.6rem; color: #4338ca; min-width: 48px; padding: 4px 2px; vertical-align: bottom;">Media UD</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for alumno in alumnos %}
+      {% with media_alumno=medias_alumnos|get_item:alumno.id %}
+        <tr>
+          <td style="position: sticky; left: 0; z-index: 1; background: #fff; font-weight: 600; text-align: left;">{{ alumno.apellidos }}, {{ alumno.nombre }}</td>
+          {% for unidad, acts in agrupaciones_ud %}
+            {% for a in acts %}
+              {% with aid=a.id|stringformat:"s" %}
+                {% with nota=notas_grid|get_item:alumno.id|get_item:aid %}
+                  <td style="{% if nota is not None %}background: {% if nota >= 7 %}#dcfce7{% elif nota >= 4 %}#fef9c3{% else %}#fee2e2{% endif %}; font-weight: 700;{% else %}font-weight: 400;{% endif %} font-size: 0.8rem;">
+                    {{ nota|floatformat:2|default:"—" }}
+                  </td>
+                {% endwith %}
+              {% endwith %}
+            {% endfor %}
+            {% with ud_key=unidad|ud_key %}
+              {% with media_ud=medias_ud|get_item:alumno.id|get_item:ud_key %}
+                <td style="background: #f0f4ff; font-weight: 700; color: #4338ca; font-size: 0.8rem;">
+                  {{ media_ud|floatformat:2|default:"—" }}
+                </td>
+              {% endwith %}
+            {% endwith %}
+          {% endfor %}
+          <td style="font-weight: 700; color: #4338ca; background: #eef2ff;">
+            {{ media_alumno|floatformat:2|default:"—" }}
+          </td>
+        </tr>
+      {% endwith %}
+    {% endfor %}
+  </tbody>
+  <tfoot>
+    <tr>
+      <td style="position: sticky; left: 0; z-index: 1; background: #f1f5f9; font-weight: 700; color: #475569; text-align: left;">Media clase</td>
+      {% for unidad, acts in agrupaciones_ud %}
+        {% for a in acts %}
+          {% with aid=a.id|stringformat:"s" %}
+            {% with media=medias_actividad|get_item:aid %}
+              <td style="background: #f1f5f9; font-weight: 700; color: #475569; font-size: 0.8rem;">
+                {{ media|floatformat:2|default:"—" }}
+              </td>
+            {% endwith %}
+          {% endwith %}
+        {% endfor %}
+        <td style="background: #e0e7ff; font-weight: 700; color: #4338ca; font-size: 0.8rem;">—</td>
+      {% endfor %}
+      <td style="background: #e0e7ff; font-weight: 700; color: #4338ca;">—</td>
+    </tr>
+  </tfoot>
+</table>
+</div>

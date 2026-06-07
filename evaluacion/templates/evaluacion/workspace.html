@@ -1,34 +1,41 @@
 {% extends "evaluacion/base.html" %}
 {% block content %}
-<div class="flex items-center gap-2 mb-4">
-  <h2>{{ asignatura.nombre }}</h2>
-  <span class="badge">{{ grupo.nombre }} · {{ grupo.curso_academico }}</span>
-</div>
-
-<div class="flex items-center gap-2 mb-4">
-  <form method="get" style="display: flex; gap: 8px; align-items: center;">
+<div class="flex items-center justify-between mb-4">
+  <div class="flex items-center gap-3">
+    <a href="{% url 'home' %}" class="btn btn-outline btn-sm">← Volver</a>
+    <h2 style="font-size: 1.3rem;">{{ asignatura.nombre }}</h2>
+    <span class="badge badge-blue">{{ grupo.nombre }} · {{ grupo.curso_academico }}</span>
+  </div>
+  <form method="get" class="flex items-center gap-2">
     <input type="hidden" name="tab" value="{{ tab }}">
-    <label for="trimestre">Trimestre:</label>
-    <select name="trimestre" id="trimestre" onchange="this.form.submit()">
+    <label class="text-sm" style="color: #64748b;">Trimestre:</label>
+    <select name="trimestre" onchange="this.form.submit()">
+      <option value="global" {% if es_global %}selected{% endif %}>🌍 Global</option>
       {% for t in trimestres %}
-        <option value="{{ t.id }}" {% if t.id == trimestre.id %}selected{% endif %}>
+        <option value="{{ t.id }}" {% if not es_global and t.id == trimestre.id %}selected{% endif %}>
           {{ t.get_nombre_display }}
         </option>
       {% endfor %}
     </select>
   </form>
-  <a href="{% url 'admin:evaluacion_actividadevaluable_add' %}" class="btn btn-primary btn-sm">+ Actividad</a>
-  <a href="{% url 'admin:evaluacion_unidaddidactica_add' %}" class="btn btn-outline btn-sm">+ Unidad</a>
 </div>
 
 <div class="tab-bar">
-  <a href="?trimestre={{ trimestre.id }}&tab=panel" class="tab {% if tab == 'panel' %}active{% endif %}">Panel</a>
-  <a href="?trimestre={{ trimestre.id }}&tab=criterios" class="tab {% if tab == 'criterios' %}active{% endif %}">Criterios</a>
-  <a href="?trimestre={{ trimestre.id }}&tab=ce" class="tab {% if tab == 'ce' %}active{% endif %}">CE</a>
-  <a href="?trimestre={{ trimestre.id }}&tab=cc" class="tab {% if tab == 'cc' %}active{% endif %}">CC</a>
+  <a href="?trimestre={{ trimestre.id }}&tab=panoramica" class="tab {% if tab == 'panoramica' %}active{% endif %}">📊 Panorámica</a>
+  <a href="?trimestre={{ trimestre.id }}&tab=panel" class="tab {% if tab == 'panel' %}active{% endif %}">📋 Panel</a>
+  <a href="?trimestre={{ trimestre.id }}&tab=criterios" class="tab {% if tab == 'criterios' %}active{% endif %}">📏 Criterios</a>
+  <a href="?trimestre={{ trimestre.id }}&tab=ce" class="tab {% if tab == 'ce' %}active{% endif %}">🎯 CE</a>
+  <a href="?trimestre={{ trimestre.id }}&tab=cc" class="tab {% if tab == 'cc' %}active{% endif %}">🏆 CC</a>
 </div>
 
-{% if tab == "panel" %}
+<div class="flex items-center gap-2 mb-4">
+  <a href="{% url 'admin:evaluacion_actividadevaluable_add' %}?trimestre={{ trimestre.id }}" class="btn btn-primary btn-sm">+ Actividad</a>
+  <a href="{% url 'admin:evaluacion_unidaddidactica_add' %}?trimestre={{ trimestre.id }}" class="btn btn-outline btn-sm">+ Unidad</a>
+</div>
+
+{% if tab == "panoramica" %}
+  {% include "evaluacion/_panoramica.html" %}
+{% elif tab == "panel" %}
   {% include "evaluacion/_panel.html" %}
 {% elif tab == "criterios" %}
   {% include "evaluacion/_criterios.html" %}

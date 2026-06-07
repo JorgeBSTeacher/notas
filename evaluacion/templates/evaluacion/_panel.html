@@ -1,55 +1,45 @@
 {% load evaluacion_extras %}
-<table>
-  <thead>
-    <tr>
-      <th>Alumno</th>
-      {% for unidad, actividades in actividades_por_unidad %}
-        {% if unidad %}
-          <th colspan="{{ actividades|length }}" style="background: #e8f0fe; text-align: center; font-size: 0.8rem;">
-            {{ unidad.nombre }}
-          </th>
-        {% else %}
-          <th colspan="{{ actividades|length }}" style="background: #f5f5f5; text-align: center; font-size: 0.8rem;">
-            Sin unidad
-          </th>
-        {% endif %}
-      {% endfor %}
-    </tr>
-    <tr>
-      <th></th>
-      {% for unidad, actividades in actividades_por_unidad %}
-        {% for actividad in actividades %}
-          <th style="font-size: 0.75rem; white-space: normal; min-width: 60px;">
-            <a href="{% url 'admin:evaluacion_actividadevaluable_change' actividad.id %}" style="color: #333; text-decoration: none;">
-              {{ actividad.nombre|truncatechars:20 }}
-            </a>
-          </th>
-        {% endfor %}
-      {% endfor %}
-    </tr>
-  </thead>
-  <tbody>
-    {% for alumno in alumnos %}
-      <tr>
-        <td>{{ alumno.apellidos }}, {{ alumno.nombre }}</td>
-        {% for unidad, actividades in actividades_por_unidad %}
-          {% for actividad in actividades %}
-            {% with key=alumno.id|stringformat:"s"|add:"_"|add:actividad.id %}
-              {% with nota=notas|get_item:key %}
-                <td>
-                  {% if nota is not None %}
-                    <span class="nota {{ nota|floatformat:1 }}">{{ nota|floatformat:2 }}</span>
-                  {% else %}
-                    <span class="text-muted">—</span>
-                  {% endif %}
-                  <br>
-                  <a href="{% url 'admin:evaluacion_actividadevaluable_entrar_notas' actividad.id %}" class="btn btn-outline btn-sm" style="margin-top: 2px;">notas</a>
-                </td>
-              {% endwith %}
-            {% endwith %}
-          {% endfor %}
-        {% endfor %}
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+
+{% for unidad, actividades in actividades_por_unidad %}
+  <div class="unidad-header">
+    {% if unidad %}
+      {{ unidad.nombre }}
+      {% if unidad.descripcion %}
+        <span style="font-weight: 400; color: #94a3b8;">· {{ unidad.descripcion|truncatechars:60 }}</span>
+      {% endif %}
+    {% else %}
+      Sin unidad didáctica
+    {% endif %}
+  </div>
+  {% for actividad in actividades %}
+    <div class="actividad-row">
+      <div class="actividad-info">
+        <h4>{{ actividad.nombre }}</h4>
+        <div class="meta flex items-center gap-2">
+          <span>{{ actividad.fecha|date:"d/m/Y" }}</span>
+          <span>·</span>
+          <span class="type-badge type-{{ actividad.tipo|default:'otro' }}">{{ actividad.get_tipo_display|default:actividad.tipo }}</span>
+          <span>·</span>
+          <span>{{ actividad.preguntas.count }} preguntas</span>
+          {% if actividad.peso != 1 %}
+            <span>· peso {{ actividad.peso }}</span>
+          {% endif %}
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        {% with aid=actividad.id|stringformat:"s" %}
+          {% with media=notas_medias|get_item:aid %}
+            {% if media is not None %}
+              <span style="font-weight: 700; font-size: 1rem; color: #2563eb;">{{ media|floatformat:2 }}</span>
+            {% endif %}
+          {% endwith %}
+        {% endwith %}
+        <a href="{% url 'notas_actividad' actividad.id %}" class="btn btn-primary btn-sm">Entrar notas</a>
+      </div>
+    </div>
+  {% endfor %}
+{% empty %}
+  <div class="card text-center" style="padding: 40px;">
+    <p class="text-muted">No hay actividades en este trimestre.</p>
+  </div>
+{% endfor %}

@@ -48,10 +48,15 @@ Tareas:
 - [x] Página principal (Home) con lista de grupos y asignaturas
 - [x] Workspace con selector de trimestre y pestañas
 - [x] Pestaña Panel: tabla Alumnos × Actividades agrupadas por unidad
-- [x] Pestaña Criterios: tabla Alumnos × Criterios (promedio)
-- [x] Pestaña CE: tabla Alumnos × Competencias Específicas (media ponderada)
-- [x] Pestaña CC: tabla Alumnos × Competencias Clave (media ponderada)
+- [x] Pestaña Criterios: tabla Alumnos × Criterios (promedio) + columna Media + fila Media clase
+- [x] Pestaña CE: tabla Alumnos × Competencias Específicas (media ponderada) + Media + Media clase
+- [x] Pestaña CC: tabla Alumnos × Competencias Clave (media ponderada) + Media + Media clase
 - [x] Cálculo de nota global de unidad (promedio simple de actividades)
+- [x] Pestaña Panorámica: tabla Alumnos × Actividades agrupadas por UD con celdas coloreadas
+- [x] Columna de media por UD en Panorámica (promedio del alumno en cada unidad)
+- [x] Selector de trimestre con opción "🌍 Global" (acumula todos los trimestres)
+- [x] Página de entrada rápida de notas con auto‑save (AJAX + debounce + indicador de estado)
+- [x] Parseo locale‑seguro de números con coma decimal (valueAsNumber)
 
 ### M5: Autenticación multi-profesor
 **Objetivo**: Soporte para múltiples profesores con aislamiento de datos.

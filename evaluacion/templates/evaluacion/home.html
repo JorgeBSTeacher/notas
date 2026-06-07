@@ -1,31 +1,42 @@
 {% extends "evaluacion/base.html" %}
 {% block content %}
-<h2 style="margin-bottom: 16px;">Mis grupos</h2>
+<div class="flex items-center justify-between mb-4">
+    <h2 style="font-size: 1.3rem;">Mis grupos</h2>
+</div>
 
 {% if not grupos %}
-  <div class="card text-center" style="padding: 40px;">
-    <p class="text-muted" style="font-size: 1.1rem;">No hay grupos todavía.</p>
-    <p class="text-muted">Crea grupos y asignaturas desde el <a href="{% url 'admin:index' %}">panel de administración</a>.</p>
+  <div class="card text-center" style="padding: 48px;">
+    <p style="font-size: 1rem; color: #64748b; margin-bottom: 8px;">No hay grupos todavía.</p>
+    <p class="text-muted">Crea grupos y asignaturas desde el <a href="{% url 'admin:index' %}" style="color: #2563eb;">panel de administración</a>.</p>
   </div>
 {% endif %}
 
-{% for grupo in grupos %}
-  <div class="card" style="padding: 0; overflow: hidden;">
-    <div class="grupo-header">
-      {{ grupo.nombre }} · {{ grupo.curso_academico }}
-      <span class="badge" style="float: right;">{{ grupo.alumnos.count }} alumnos</span>
+<div class="grid grid-4 gap-4">
+  {% for grupo in grupos %}
+    <div class="card" style="padding: 0; overflow: hidden;">
+      <div style="padding: 16px 16px 12px; border-bottom: 1px solid #f0f0f0;">
+        <div class="flex items-center justify-between">
+          <h3 style="font-size: 1rem; font-weight: 700;">{{ grupo.nombre }}</h3>
+          <span class="badge badge-blue">{{ grupo.curso_academico.nombre }}</span>
+        </div>
+        <div class="flex items-center gap-2 mt-2">
+          <span class="badge">{{ grupo.alumnos.count }} alumnos</span>
+          {% if grupo.tutor %}
+            <span class="text-muted">{{ grupo.tutor.get_full_name|default:grupo.tutor.username }}</span>
+          {% endif %}
+        </div>
+      </div>
+      <div style="padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 6px;">
+        {% for asignatura in grupo.asignaturas.all %}
+          <a href="{% url 'workspace' asignatura.id %}"
+             class="btn btn-soft btn-sm">
+            {{ asignatura.nombre }}
+          </a>
+        {% empty %}
+          <span class="text-muted">Sin asignaturas</span>
+        {% endfor %}
+      </div>
     </div>
-    <div style="padding: 12px;">
-      {% for asignatura in grupo.asignaturas.all %}
-        <a href="{% url 'workspace' asignatura.id %}" 
-           class="btn btn-outline btn-sm"
-           style="margin: 4px;">
-          {{ asignatura.nombre }}
-        </a>
-      {% empty %}
-        <span class="text-muted">Sin asignaturas</span>
-      {% endfor %}
-    </div>
-  </div>
-{% endfor %}
+  {% endfor %}
+</div>
 {% endblock %}
