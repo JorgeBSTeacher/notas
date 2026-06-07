@@ -61,6 +61,7 @@ Home → Lista de Grupos y Asignaturas
 ```
 - Entrada con auto‑save (AJAX + debounce 400ms)
 - Indicador de estado: ● amarillo (guardando), ● verde (guardado), ● rojo (error)
+- Botón ✕ para eliminar la nota (solo visible si hay valor guardado)
 - Modo "por pregunta": tabla Alumnos × Preguntas, cada pregunta vinculada a un criterio
 
 ## Mockup textual del Home

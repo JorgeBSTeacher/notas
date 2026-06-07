@@ -56,6 +56,7 @@ Tareas:
 - [x] Columna de media por UD en Panorámica (promedio del alumno en cada unidad)
 - [x] Selector de trimestre con opción "🌍 Global" (acumula todos los trimestres)
 - [x] Página de entrada rápida de notas con auto‑save (AJAX + debounce + indicador de estado)
+- [x] Botón ✕ para eliminar nota de un alumno (con confirmación)
 - [x] Parseo locale‑seguro de números con coma decimal (valueAsNumber)
 
 ### M5: Autenticación multi-profesor
