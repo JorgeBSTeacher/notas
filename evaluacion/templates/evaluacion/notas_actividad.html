@@ -54,6 +54,9 @@
                            value="{{ calif.valor_numerico|default:'' }}"
                            style="width: 70px; text-align: center;">
                     <span class="saved-indicator" id="ind-{{ alumno.id }}-{{ pregunta.criterio.id }}"></span>
+                    {% if calif.valor_numerico is not None %}
+                      <button type="button" class="btn-del" data-alumno="{{ alumno.id }}" data-criterio="{{ pregunta.criterio.id }}" title="Eliminar nota" style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border:none;border-radius:50%;background:#fee2e2;color:#dc2626;font-size:0.65rem;cursor:pointer;margin-left:4px;vertical-align:middle;">✕</button>
+                    {% endif %}
                   </td>
                 {% endwith %}
               {% endwith %}
@@ -90,6 +93,9 @@
                          value="{{ calif.valor_numerico|default:'' }}"
                          style="width: 80px; text-align: center;">
                   <span class="saved-indicator" id="ind-{{ alumno.id }}"></span>
+                  {% if calif.valor_numerico is not None %}
+                    <button type="button" class="btn-del" data-alumno="{{ alumno.id }}" title="Eliminar nota" style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border:none;border-radius:50%;background:#fee2e2;color:#dc2626;font-size:0.65rem;cursor:pointer;margin-left:4px;vertical-align:middle;">✕</button>
+                  {% endif %}
                 </td>
                 <td style="font-size: 0.75rem; color: #94a3b8; text-align: left;">
                   {{ calif.nota_final|floatformat:2|default:"—" }}
@@ -127,10 +133,24 @@ document.querySelectorAll('.nota-input').forEach(input => {
   });
 });
 
+document.querySelectorAll('.btn-del').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (!confirm('¿Eliminar esta nota?')) return;
+    const alumnoId = btn.dataset.alumno;
+    const critId = btn.dataset.criterio || 'global';
+    const input = document.querySelector(`.nota-input[data-alumno="${alumnoId}"]${critId !== 'global' ? `[data-criterio="${critId}"]` : ':not([data-criterio])'}`);
+    const ind = document.getElementById(`ind-${alumnoId}${critId !== 'global' ? '-' + critId : ''}`);
+    if (input) {
+      input.value = '';
+      autoSave(input, ind);
+    }
+  });
+});
+
 function autoSave(input, ind) {
   const valor = input.value.trim();
   const numVal = valor === '' ? null : input.valueAsNumber;
-  data = {
+  const data = {
     alumno_id: parseInt(input.dataset.alumno),
     actividad_id: parseInt(input.dataset.actividad),
     valor: (numVal !== null && !isNaN(numVal)) ? numVal : null,
